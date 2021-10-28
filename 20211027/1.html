@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .group {
+            width: 100%;
+            height: 100vh;
+            display: inline-block;
+            background-color: rgba(95, 158, 160, 0.815);
+            padding: 10px 5px;
+            /* border-radius: 5%; */
+            color: #fff;
+            position: relative;
+            box-sizing: border-box;
+
+        }
+
+        .group h2 {
+            max-width: 900px;
+            min-width: 600px;
+            margin: 100px auto 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .group .img1 {
+            width: 50px;
+            vertical-align: middle;
+        }
+
+
+        .box {
+            max-width: 900px;
+            min-width: 600px;
+            margin: 0 auto;
+            height: 50px;
+            line-height: 50px;
+            background-color: rgba(0, 0, 0, 0.2);
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            padding-left: 20px;
+        }
+
+        .box:hover {
+            background-color: rgba(0, 0, 0, .6);
+        }
+
+        .footer {
+            width: 100%;
+            height: 200px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            transition: all .3s linear;
+            background-color: rgba(0, 0, 0, .6);
+        }
+
+
+
+
+        .footer h4 {
+            height: 30px;
+            background-color: rgba(0, 0, 0, 0.37);
+            box-shadow: 0 1px 1px 1px rgba(255, 255, 255, 0.13);
+
+        }
+
+        .footer h4 img {
+            float: right;
+            width: 25px;
+
+        }
+
+        .footer h4 .lock {
+            float: right;
+            display: flex;
+            height: 100%;
+            width: 100px;
+            /* align-items: center; */
+            /* text-align: center; */
+            justify-content: end;
+            padding-right: 30px;
+            padding-top: 5px;
+
+        }
+
+        .lock i {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.383);
+            transform: rotate(45deg);
+        }
+
+        .lock #arr1 {
+            border-top: none;
+            border-left: none;
+
+        }
+
+        .lock #arr2 {
+            border-bottom: none;
+            border-right: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="group">
+            <h2>
+                <div class="left">
+                    <img src="./播放器-播放数 (2).png" alt="" class="img1">
+                    <span>播放全部</span>
+                    <i>|</i>
+                    <span>{{playList.length}}</span>
+                </div>
+
+
+                <div class="right">
+                    <img src="./" alt="">
+                </div>
+            </h2>
+            <div class="box" v-for="p,i in playList" >
+                <input type="checkbox" id="checked">
+                <span>{{p.id}}.{{p.songsName}}</span>
+            </div>
+            <div class="box2" v-for="p,i in playList" :key="p.id">
+
+                <audio :src="p.songsMp" id="Play" ></audio>
+            </div>
+            <!-- 底部播放 -->
+            <div class="footer">
+                <h4>
+                    <div class="lock">
+                        <i v-if="flag" id="arr1" @click='arr1'></i>
+                        <i v-else id="arr2" @click='arr2'></i>
+                    </div>
+
+
+                </h4>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+</body>
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            playList: [],
+            time: "",
+            flag: true
+        },
+        created() {
+            this.getPlayList();
+        },
+        methods: {
+            getPlayList() {
+                let url = './data/songs.json';
+                axios.get(url).then((res) => {
+                    // console.log(res.data.songs);
+                    this.playList = res.data.songs;
+                    // console.log(this.playList);
+                })
+            },
+            arr1(e) {
+                console.log(e.target.parentElement);
+                e.target.parentElement.parentElement.parentElement.style.height = "20px";
+                this.flag = !this.flag;
+                console.log(this.flag);
+            },
+            arr2(e) {
+                e.target.parentElement.parentElement.parentElement.style.height = "200px";
+                this.flag = !this.flag;
+                console.log(this.flag);
+            }
+
+        }
+    })
+</script>
+
+</html>
